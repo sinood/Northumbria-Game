@@ -1,5 +1,4 @@
-/*
- * This class creates an Area which abstracts Northumbria's Town and Room type areas.
+* This class creates an Area which abstracts Northumbria's Town and Room type areas.
  * Namely, the class takes, sets, and returns an area's name, description, displayed image
  * and available connections to other areas.
  */
@@ -24,7 +23,7 @@ public class Area {
 	}
 	
 	public void printDesc(){
-		game.println(desc);
+		game.println(name.toUpperCase() + ": "+ desc);
 	}
 	
 	public String  setDesc(String desc){

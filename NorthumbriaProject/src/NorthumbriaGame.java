@@ -37,7 +37,7 @@ public class NorthumbriaGame {
 	private JTextField txt2;
 	
 	public String userText;
-	private String prompt2;
+	private String prompt2 = "";
 	
 	private Player p;
 	
@@ -78,33 +78,123 @@ public class NorthumbriaGame {
 		//add areas
 		
 		//Town: Finchel
-		Area finchel = new Area("Finchel", "FINCHEL DESCRIPTION", this);
+		Area finchel = new Area("Finchel", "You are in a moorish, hillish town with cobble streets "
+				+ "and half-timbered houses. While the landscape outside the town contains mostly heath, "
+				+ "trees line\nthe streets within.", this); //exterior
 		
-		Area finchelS = new Area("Wymar's Wares", "WYMAR'S WARES DESCRIPTION", this);
+		//interiors
+		Area finchelS = new Area("Wymar's Wares", "You have entered a small general store.", this);
 
-		Area finchelT1 = new Area("The Rusty Swordsman", "THE RUSTY SWORDSMAN DESCRIPTION", this);
+		Area finchelT1 = new Area("The Rusty Swordsman", "You are in a tavern with many elders of Finchel.", this);
 		
-		Area finchelT2 = new Area("Barret's Taphouse", "BARRET'S TAPHOUSE DESCRIPTION", this);
+		Area finchelT2 = new Area("Barret's Taphouse", "You have entered a tavern with many revellers of"
+				+ " your own age. You find many of your friends here.", this);
 		
+		Area finchelB = new Area("Baynard's Breads", "You have entered a bakery run by a familiar face."
+				+ " You note the window has always read \"Help Wanted\".", this);
 		
+		//Exits from Finchel's exterior to its interiors
 		finchel.addExit(finchelS, "West");
 		finchel.addExit(finchelT1, "South");
 		finchel.addExit(finchelT2, "East");
+		finchel.addExit(finchelB, "SE");
 		
+		//Exits from Finchel's interiors to its exterior
 		finchelS.addExit(finchel, "East");
 		finchelT1.addExit(finchel, "North");
 		finchelT2.addExit(finchel, "West");
+		finchelB.addExit(finchel, "NW");
+		
+		//Exits from Finchel's exterior to other exteriors
+		
+		//Town: Cromfield
+		Area cromfield = new Area("Cromfield", "You are in a town surrounded by wheatfields and meadows; "
+				+ "and many of the homes have thatched roofs. As you enter, you notice a large horse stable"
+				+ " beside the town gate.", this); //exterior
+		//interiors
+		Area cromfieldS = new Area("the market", "You walk along a row of stalls with farmers selling their produce.", this);
+		
+		Area cromfieldI = new Area("Hodge's Lodge", "You enter a lively and cozy inn with many new but inviting faces.", this);
+		//Exits from Cromfield's exterior to its interiors
+		cromfield.addExit(cromfieldS, "East");
+		cromfield.addExit(cromfieldI, "North");
+		
+		//Exits from Cromfield's interior to its exteriors
+		cromfieldS.addExit(cromfield, "West");
+		cromfieldI.addExit(cromfield, "South");
+		
+		//Town: Hyne
+		Area hyne = new Area("Hyne", "You are in a town nestled in a green valley. You hear the constant "
+				+ "sound of a rushing river and wood being sawed. The stone buildings are shaded by large oak "
+				+ "trees and sit above paved sidewalks.", this); //exterior
+		//interiors
+		
+		//Exits from Hyne's exterior to its interiors
+		
+		//Exits from Hyne's interior to its exteriors
+		
+		
+		//Town: Ledbarrow
+		
+		//interiors
+		
+		//Exits from Ledbarrow's exterior to its interiors
+		
+		//Exits from Ledbarrow's interior to its exteriors
+		
+		
+		//Town: Town 5
+		
+		//interiors
+		
+		//Exits from 5's exterior to its interiors
+		
+		//Exits from 5's interior to its exteriors
+		
+		
+		//Inn: Inn name
+		
+		//exterior
+		
+		//interior
+		
+		//Exits from inn's exterior to its interior
+		
+		//Exits from inn's interior to its exterior
+		
+		
+		//Castle
+		
+		//Exterior
+		
+		//interiors
+		
+		//Exits from castle's exterior to its interior
+		
+		//Exits from castle's interior to its exterior
+		
+		//Exits between castle's interiors
+		
+		
+		//Northumbria exteriors
+		finchel.addExit(cromfield, "North");
+		cromfield.addExit(finchel, "South");
+		//Exits between Northumbria's exteriors
+		
+		
+		
 		//test input gather
 		//promptInput("Type in the box above. ^", "Type here > ");
 		//test image set method
 		
-		
-		//add paths
 		//add characters
 		
 		//addPlayer
 		p = new Player("Rolf", "Mason", this, finchel);
-		//add ...
+		
+		//add characters
+		
+		//add objects
 	}
 
 	/**
@@ -119,12 +209,12 @@ public class NorthumbriaGame {
 		frame.getContentPane().setBackground(new Color(200,200,200));
 		
 		JPanel pnl1 = new JPanel();
-		pnl1.setBounds(0,565,800,50);
+		pnl1.setBounds(0,565,800,75);
 		pnl1.setBackground(new Color(100,50,0));
 		
 		// "west" button
-		JButton wButton = new JButton("West");
-		wButton.setBounds(0, 590, 100, 25);
+		JButton wButton = new JButton("W");
+		wButton.setBounds(0, 590, 50, 25);
 		wButton.setBackground(new Color(0,0,0));
 		wButton.setFont(new Font("Times New Roman", 10, 16));
 		wButton.addActionListener(new ActionListener() {
@@ -134,8 +224,8 @@ public class NorthumbriaGame {
 		});
 		
 		//"north" button
-		JButton nButton = new JButton("North");
-		nButton.setBounds(100, 565, 100, 25);
+		JButton nButton = new JButton("N");
+		nButton.setBounds(50, 565, 50, 25);
 		nButton.setBackground(new Color(0,0,0));
 		nButton.setFont(new Font("Times New Roman", 10, 16));
 		nButton.addActionListener(new ActionListener() {
@@ -145,8 +235,8 @@ public class NorthumbriaGame {
 		});
 		
 		//"south" button
-		JButton sButton = new JButton("South");
-		sButton.setBounds(100, 590, 100, 25);
+		JButton sButton = new JButton("S");
+		sButton.setBounds(50, 615, 50, 25);
 		sButton.setBackground(new Color(0,0,0));
 		sButton.setFont(new Font("Times New Roman", 10, 16));
 		sButton.addActionListener(new ActionListener() {
@@ -156,8 +246,8 @@ public class NorthumbriaGame {
 		});
 		
 		//"east" button
-		JButton eButton = new JButton("East");
-		eButton.setBounds(200, 590, 100, 25);
+		JButton eButton = new JButton("E");
+		eButton.setBounds(100, 590, 50, 25);
 		eButton.setBackground(new Color(0,0,0));
 		eButton.setFont(new Font("Times New Roman", 10, 16));
 		eButton.addActionListener(new ActionListener() {
@@ -166,9 +256,52 @@ public class NorthumbriaGame {
 			}
 		});
 		
+		//"SE" button
+		JButton seButton = new JButton("SE");
+		seButton.setBounds(100, 615, 50, 25);
+		seButton.setBackground(new Color(0,0,0));
+		seButton.setFont(new Font("Times New Roman", 10, 16));
+		seButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) { //generates output upon click of the button
+				p.move("SE");
+			}
+		});
+		
+		//"SW" button
+		JButton swButton = new JButton("SW");
+		swButton.setBounds(0, 615, 50, 25);
+		swButton.setBackground(new Color(0,0,0));
+		swButton.setFont(new Font("Times New Roman", 10, 16));
+		swButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) { //generates output upon click of the button
+				p.move("SW");
+			}
+		});
+		
+		//"NW" button
+		JButton nwButton = new JButton("NW");
+		nwButton.setBounds(0, 565, 50, 25);
+		nwButton.setBackground(new Color(0,0,0));
+		nwButton.setFont(new Font("Times New Roman", 10, 15));
+		nwButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) { //generates output upon click of the button
+				p.move("NW");
+			}
+		});
+		
+		//"NW" button
+		JButton neButton = new JButton("NE");
+		neButton.setBounds(100, 565, 50, 25);
+		neButton.setBackground(new Color(0,0,0));
+		neButton.setFont(new Font("Times New Roman", 10, 16));
+		neButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) { //generates output upon click of the button
+				p.move("NE");
+			}
+		});
 		
 		JButton menuButton = new JButton("Menu");
-		menuButton.setBounds(620, 565, 60, 50);
+		menuButton.setBounds(695, 565, 100, 75);
 		menuButton.setBackground(new Color(0,0,0));
 		menuButton.setFont(new Font("Times New Roman", 10, 16));
 		menuButton.addActionListener(new ActionListener() {
@@ -178,9 +311,9 @@ public class NorthumbriaGame {
 		});
 		
 		JButton mapButton = new JButton("Map");
-		mapButton.setBounds(680, 565, 60, 50);
+		mapButton.setBounds(50, 590, 50, 25);
 		mapButton.setBackground(new Color(0,0,0));
-		mapButton.setFont(new Font("Times New Roman", 10, 16));
+		mapButton.setFont(new Font("Times New Roman", 10, 12));
 		mapButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) { //generates output upon click of the button
 				println("Testing Button 2"); //**can use setText method but this prevents deletion
@@ -194,18 +327,18 @@ public class NorthumbriaGame {
 		
 		//creates text area at the bottom of the window
 		txt1 = new JTextArea();
-		txt1.setBounds(0,635, 800, 150);
+		txt1.setBounds(0,660, 800, 125);
 		txt1.setBackground(new Color(255,255,255));
 		txt1.setFont(new Font("Times New Roman", Font.BOLD, 12));
 		txt1.setColumns(10);
 		
 		//sets scrolling function to the text area at the bottom of the window
 		sp = new JScrollPane();
-		sp.setBounds(0,635, 800, 150);
+		sp.setBounds(0,660, 800, 125);
 		sp.setViewportView(txt1); 
 		
 		txt2 = new JTextField();
-		txt2.setBounds(0,615, 800, 20);
+		txt2.setBounds(0,640, 800, 20);
 		txt2.setBackground(new Color(255,255,255));
 		txt2.setFont(new Font("Courier", Font.BOLD, 12));
 		txt2.addActionListener(new ActionListener() {
@@ -238,6 +371,10 @@ public class NorthumbriaGame {
 		frame.getContentPane().add(nButton);
 		frame.getContentPane().add(sButton);
 		frame.getContentPane().add(eButton);
+		frame.getContentPane().add(swButton);
+		frame.getContentPane().add(nwButton);
+		frame.getContentPane().add(neButton);
+		frame.getContentPane().add(seButton);
 		
 		frame.getContentPane().add(menuButton);
 		frame.getContentPane().add(mapButton);
