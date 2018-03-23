@@ -1,4 +1,5 @@
-* This class creates an Area which abstracts Northumbria's Town and Room type areas.
+/*
+ * This class creates an Area which abstracts Northumbria's Town and Room type areas.
  * Namely, the class takes, sets, and returns an area's name, description, displayed image
  * and available connections to other areas.
  */
@@ -8,7 +9,7 @@ import java.util.ArrayList;
 public class Area {
 	protected String name;
 	protected String desc;
-	private ArrayList<Exit> exits;
+	public ArrayList<Exit> exits;
 	private NorthumbriaGame game;
 	
 	public Area(String name, String desc, NorthumbriaGame game){
@@ -46,9 +47,13 @@ public class Area {
 		return false;
 	}
 	
+	public int getExitAmount(){
+		return exits.size();
+	}
+	
 	public Exit getExit(String exitToCheck){
 		for(Exit e : exits){
-			if(e.getDirection().equals(exitToCheck)){
+			if(e.getDirection().equalsIgnoreCase(exitToCheck)){
 				return e;
 			}
 		}

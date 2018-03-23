@@ -21,6 +21,7 @@ import java.awt.Graphics;
 import java.awt.Color;
 //import java.awt.BorderLayout;
 import java.awt.event.ActionListener;
+import java.util.regex.Pattern;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
 import javax.swing.JTextField;
@@ -34,13 +35,27 @@ public class NorthumbriaGame {
 	private JFrame frame;
 	public JTextArea txt1;
 	private JScrollPane sp;
-	private JTextField txt2;
+	public JTextField txt2;
+	public JLabel nw;
+	public JLabel n;
+	public JLabel ne;
+	public JLabel w;
+	public JLabel you;
+	public JLabel e;
+	public JLabel sw;
+	public JLabel s;
+	public JLabel se;
 	
+	
+	private InputCollect ic = new InputCollect(this);
 	public String userText;
-	private String prompt2 = "";
+	public String prompt2 = "";
+	
+	public static int time = 0;
 	
 	private Player p;
 	
+	private LocalMap lm;
 	private static String currentInput;
 	//images
 	//private Image img1 = new Image ("testimg2.JPG");
@@ -190,11 +205,16 @@ public class NorthumbriaGame {
 		//add characters
 		
 		//addPlayer
-		p = new Player("Rolf", "Mason", this, finchel);
+		p = new Player("Rolf", "Mason", 100, 100, finchel, this);
 		
 		//add characters
 		
-		//add objects
+		//add items
+		Item bread = new Food("Bread", 3, 5, 10);
+		p.addItem(new Food("Steak", 8, 3, 25));
+		p.addItem(bread);
+		
+		lm = new LocalMap(this, p);
 	}
 
 	/**
@@ -212,9 +232,13 @@ public class NorthumbriaGame {
 		pnl1.setBounds(0,565,800,75);
 		pnl1.setBackground(new Color(100,50,0));
 		
+		JPanel pnl2 = new JPanel();
+		pnl2.setBounds(5,570,290,65);
+		pnl2.setBackground(new Color(200,200,200));
+		
 		// "west" button
 		JButton wButton = new JButton("W");
-		wButton.setBounds(0, 590, 50, 25);
+		wButton.setBounds(300, 590, 50, 25);
 		wButton.setBackground(new Color(0,0,0));
 		wButton.setFont(new Font("Times New Roman", 10, 16));
 		wButton.addActionListener(new ActionListener() {
@@ -225,7 +249,7 @@ public class NorthumbriaGame {
 		
 		//"north" button
 		JButton nButton = new JButton("N");
-		nButton.setBounds(50, 565, 50, 25);
+		nButton.setBounds(350, 565, 50, 25);
 		nButton.setBackground(new Color(0,0,0));
 		nButton.setFont(new Font("Times New Roman", 10, 16));
 		nButton.addActionListener(new ActionListener() {
@@ -236,7 +260,7 @@ public class NorthumbriaGame {
 		
 		//"south" button
 		JButton sButton = new JButton("S");
-		sButton.setBounds(50, 615, 50, 25);
+		sButton.setBounds(350, 615, 50, 25);
 		sButton.setBackground(new Color(0,0,0));
 		sButton.setFont(new Font("Times New Roman", 10, 16));
 		sButton.addActionListener(new ActionListener() {
@@ -247,7 +271,7 @@ public class NorthumbriaGame {
 		
 		//"east" button
 		JButton eButton = new JButton("E");
-		eButton.setBounds(100, 590, 50, 25);
+		eButton.setBounds(400, 590, 50, 25);
 		eButton.setBackground(new Color(0,0,0));
 		eButton.setFont(new Font("Times New Roman", 10, 16));
 		eButton.addActionListener(new ActionListener() {
@@ -258,7 +282,7 @@ public class NorthumbriaGame {
 		
 		//"SE" button
 		JButton seButton = new JButton("SE");
-		seButton.setBounds(100, 615, 50, 25);
+		seButton.setBounds(400, 615, 50, 25);
 		seButton.setBackground(new Color(0,0,0));
 		seButton.setFont(new Font("Times New Roman", 10, 16));
 		seButton.addActionListener(new ActionListener() {
@@ -269,7 +293,7 @@ public class NorthumbriaGame {
 		
 		//"SW" button
 		JButton swButton = new JButton("SW");
-		swButton.setBounds(0, 615, 50, 25);
+		swButton.setBounds(300, 615, 50, 25);
 		swButton.setBackground(new Color(0,0,0));
 		swButton.setFont(new Font("Times New Roman", 10, 16));
 		swButton.addActionListener(new ActionListener() {
@@ -280,7 +304,7 @@ public class NorthumbriaGame {
 		
 		//"NW" button
 		JButton nwButton = new JButton("NW");
-		nwButton.setBounds(0, 565, 50, 25);
+		nwButton.setBounds(300, 565, 50, 25);
 		nwButton.setBackground(new Color(0,0,0));
 		nwButton.setFont(new Font("Times New Roman", 10, 15));
 		nwButton.addActionListener(new ActionListener() {
@@ -291,7 +315,7 @@ public class NorthumbriaGame {
 		
 		//"NW" button
 		JButton neButton = new JButton("NE");
-		neButton.setBounds(100, 565, 50, 25);
+		neButton.setBounds(400, 565, 50, 25);
 		neButton.setBackground(new Color(0,0,0));
 		neButton.setFont(new Font("Times New Roman", 10, 16));
 		neButton.addActionListener(new ActionListener() {
@@ -299,6 +323,50 @@ public class NorthumbriaGame {
 				p.move("NE");
 			}
 		});
+		
+		JButton mapButton = new JButton("Map");
+		mapButton.setBounds(350, 590, 50, 25);
+		mapButton.setBackground(new Color(0,0,0));
+		mapButton.setFont(new Font("Times New Roman", 10, 12));
+		mapButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) { //generates output upon click of the button
+				println("Testing Button 2"); //**can use setText method but this prevents deletion
+			}
+		});
+		
+		JButton searchButton = new JButton("Search");
+		searchButton.setBounds(450, 565, 75, 75);
+		searchButton.setBackground(new Color(0,0,0));
+		searchButton.setFont(new Font("Times New Roman", 10, 16));
+		searchButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) { //generates output upon click of the button
+				println("Testing Button 2"); //**can use setText method but this prevents deletion
+			}
+		});
+		
+		JButton waitButton = new JButton("Wait");
+		waitButton.setBounds(525, 565, 75, 75);
+		waitButton.setBackground(new Color(0,0,0));
+		waitButton.setFont(new Font("Times New Roman", 10, 16));
+		waitButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) { //generates output upon click of the button
+				promptInput("How many hours? (0-8)");
+				ic.waitAction();
+				
+			}
+		});
+		
+		JButton timeButton = new JButton("Time");
+		timeButton.setBounds(600, 565, 75, 75);
+		timeButton.setBackground(new Color(0,0,0));
+		timeButton.setFont(new Font("Times New Roman", 10, 16));
+		timeButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) { //generates output upon click of the button
+				println(getTime()); //**can use setText method but this prevents deletion
+			}
+		});
+		
+		
 		
 		JButton menuButton = new JButton("Menu");
 		menuButton.setBounds(695, 565, 100, 75);
@@ -310,17 +378,68 @@ public class NorthumbriaGame {
 			}
 		});
 		
-		JButton mapButton = new JButton("Map");
-		mapButton.setBounds(50, 590, 50, 25);
-		mapButton.setBackground(new Color(0,0,0));
-		mapButton.setFont(new Font("Times New Roman", 10, 12));
-		mapButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) { //generates output upon click of the button
-				println("Testing Button 2"); //**can use setText method but this prevents deletion
-			}
-		});
+		//Local "map"
+		nw = new JLabel();
+		nw.setBounds(10, 572, 92, 20);
+		nw.setBackground(new Color(255,255,255));
+		nw.setOpaque(true);
+		nw.setFont(new Font("Times New Roman", 10, 10));
+		nw.setHorizontalAlignment(nw.CENTER);
 		
+		n = new JLabel();
+		n.setBounds(103, 572, 94, 20);
+		n.setBackground(new Color(255,255,255));
+		n.setOpaque(true);
+		n.setFont(new Font("Times New Roman", 10, 10));
+		n.setHorizontalAlignment(n.CENTER);
 		
+		ne = new JLabel();
+		ne.setBounds(198, 572, 92, 20);
+		ne.setBackground(new Color(255,255,255));
+		ne.setOpaque(true);
+		ne.setFont(new Font("Times New Roman", 10, 10));
+		ne.setHorizontalAlignment(ne.CENTER);
+		
+		w = new JLabel();
+		w.setBounds(10, 593, 92, 20);
+		w.setBackground(new Color(255,255,255));
+		w.setOpaque(true);
+		w.setFont(new Font("Times New Roman", 10, 10));
+		w.setHorizontalAlignment(w.CENTER);
+		
+		you = new JLabel();
+		you.setBounds(103, 593, 94, 20);
+		you.setBackground(new Color(0,0,0));
+		you.setFont(new Font("Times New Roman", 10, 10));
+		you.setHorizontalAlignment(you.CENTER);
+		
+		e = new JLabel();
+		e.setBounds(198, 593, 92, 20);
+		e.setBackground(new Color(255,255,255));
+		e.setOpaque(true);
+		e.setFont(new Font("Times New Roman", 10, 10));
+		e.setHorizontalAlignment(e.CENTER);
+		
+		sw = new JLabel();
+		sw.setBounds(10, 614, 92, 20);
+		sw.setBackground(new Color(255,255,255));
+		sw.setOpaque(true);
+		sw.setFont(new Font("Times New Roman", 10, 10));
+		sw.setHorizontalAlignment(sw.CENTER);
+		
+		s = new JLabel();
+		s.setBounds(103, 614, 94, 20);
+		s.setBackground(new Color(255,255,255));
+		s.setOpaque(true);
+		s.setFont(new Font("Times New Roman", 10, 10));
+		s.setHorizontalAlignment(s.CENTER);
+		
+		se = new JLabel();
+		se.setBounds(198, 614, 92, 20);
+		se.setBackground(new Color(255,255,255));
+		se.setOpaque(true);
+		se.setFont(new Font("Times New Roman", 10, 10));
+		se.setHorizontalAlignment(se.CENTER);
 		//initial image set
 		
 		//add(visual);
@@ -367,6 +486,17 @@ public class NorthumbriaGame {
 		//MAKE SURE TO ADD CONDITIONS HERE SO THAT DIFFERENT DISPLAYS DO NOT SHOW EVERY BUTTON CREATED******
 		//adds buttons
 		//condition...
+		
+		frame.getContentPane().add(nw);
+		frame.getContentPane().add(n);
+		frame.getContentPane().add(ne);
+		frame.getContentPane().add(w);
+		frame.getContentPane().add(you);
+		frame.getContentPane().add(e);
+		frame.getContentPane().add(sw);
+		frame.getContentPane().add(s);
+		frame.getContentPane().add(se);
+		
 		frame.getContentPane().add(wButton);
 		frame.getContentPane().add(nButton);
 		frame.getContentPane().add(sButton);
@@ -378,6 +508,9 @@ public class NorthumbriaGame {
 		
 		frame.getContentPane().add(menuButton);
 		frame.getContentPane().add(mapButton);
+		frame.getContentPane().add(timeButton);
+		frame.getContentPane().add(waitButton);
+		frame.getContentPane().add(searchButton);
 		
 		//adds scroll function to window, along with the text area
 		frame.getContentPane().add(sp);
@@ -385,15 +518,21 @@ public class NorthumbriaGame {
 		//adds user input text field to window
 		frame.getContentPane().add(txt2);
 		
+		frame.getContentPane().add(pnl2);
 		frame.getContentPane().add(pnl1);
-	}
-	
-	public void play(){
-		p.getCurrentArea().printDesc();
-		p.getCurrentArea().showExits();
 		
 	}
 	
+	//game play method
+	public void play(){
+		p.getCurrentArea().printDesc();
+		p.getCurrentArea().showExits();
+		lm.reset();
+		
+		
+	}
+	
+	//GUI methods
 	//prints text to the scrollable text window from the bottom up
 	public void println(String text){
 		txt1.append(text + "\n");
@@ -403,14 +542,58 @@ public class NorthumbriaGame {
 		txt1.append(text);
 	}
 	
+	public JTextField getTextField(){
+		return txt2;
+	}
+	
 	//prints a given user input prompt to both the bottom text area and the top text field
-	public void promptInput(String prompt1, String prompt2){
-		this.prompt2 = prompt2;
-		println(prompt1);
+	public void promptInput(String prompt1){
+		prompt2 = "Type here > ";
+		println(prompt1+ " Type in the box above. ^");
 		txt2.setText(prompt2);
 	}
 	
 	public String getCurrentInput(){
 		return currentInput;
+	}
+	
+	public String getTime(){
+		String month = "March";
+		int day = 1;
+		int hour = 12;
+		if(time < 744){
+			month = "March";
+			day  = (time / 24)+1;
+			hour = time % 24;
+		} else if(time >= 744 && time < 1464){
+			month = "April";
+			day  = ((time-744) / 24)+1;
+			hour = (time-744) % 24;
+		}else if(time >= 1464 && time <= 2208){
+			month = "May";
+			day  = ((time-1464) / 24)+1;
+			hour = (time-1464) % 24;
+		} else if(time >= 2208){ //MAKE SURE TO ADD END GAME DAY
+			month = "June";
+			day  = ((time-2208) / 24)+1;
+			hour = (time-2208) % 24;
+		}
+		return hour + ":00 "+ month + " "+ day + ", 937";
+	}
+	
+	public void wait(String input){
+		boolean isNumber = Pattern.matches("[0-9]+", input);
+		if(isNumber){
+			int amount = Integer.parseInt(input);
+			if(amount <= 8){
+				time += amount;
+				println("Waited "+ amount + " hours.");
+			} else{
+				println("***You may only wait between 0 and 8 hours at a time.***");
+			}
+		} else{
+			println("***You must type your answer as a positive number of hours (Ex. '3')! Try again.***");
+		}
+		
 	}
 }

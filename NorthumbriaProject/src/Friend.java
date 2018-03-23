@@ -1,14 +1,10 @@
 
 public class Friend extends NPC{ //Friend is an NPC that can join the Player on his quest
 	
-	protected int combat;
-	protected int health;
-	private Player p;
 	
-	public Friend(String name, int money, Area area, int combat, int health){
-		super(name, money, area);
+	public Friend(String name, int money, Area area, int combat, int health, NorthumbriaGame game){
+		super(name, money, health, combat, area, game);
 		this.combat = combat;
-		this.health = health;
 	}
 	
 	public String getName(){
@@ -31,16 +27,13 @@ public class Friend extends NPC{ //Friend is an NPC that can join the Player on 
 		money -= amount;
 	}
 	
-	//new methods
-	public void shareMoney(Player p){
-		p.addMoney(money);
-		money = 0;
-	}
-	
 	public int getCombat(){
 		return combat;
 	}
 	
+	public void setCombat(int amount){
+		combat += amount;
+	}
 	public int getHealth(){
 		return health;
 	}
@@ -55,6 +48,12 @@ public class Friend extends NPC{ //Friend is an NPC that can join the Player on 
 	
 	public void harm(int amount){
 		health -= amount;
+	}
+	
+	//new methods
+	public void shareMoney(Player p){
+		p.addMoney(money);
+		money = 0;
 	}
 	
 	
