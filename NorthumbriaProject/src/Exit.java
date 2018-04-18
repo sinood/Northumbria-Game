@@ -1,6 +1,6 @@
 /*
- * The Path class creates connections or 'exits' between Areas in the game.
- * Paths are defined by the Area being exited and the Area being entered, and the
+ * The Exit class creates paths or 'exits' between Areas in the game.
+ * Exits are defined by the Area being exited and the Area being entered, and the
  * direction of the exit from the current area i.e. "west" or "north" exits
  */
 public class Exit {
